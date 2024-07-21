@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agents Management System</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const socket = io();
+
+            socket.on('connect', () => {
+                console.log('Connected to server');
+            });
+
+            socket.on('task_update', (data) => {
+                console.log('Task update:', data);
+                // Update the UI with task progress
+            });
+
+            socket.on('response', (data) => {
+                console.log(data.message);
+            });
+        });
+    </script>
+</head>
+<body>
+    {% extends "base.html" %}
+    {% block content %}
+    <div class="container">
+        <h1 class="mt-5">Agents Management System</h1>
+        <ul class="nav nav-pills mt-3">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('manage_agents') }}">Manage Agents</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('manage_tasks') }}">Manage Tasks</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('manage_crews') }}">Manage Crews</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('manage_chains') }}">Manage Chains</a>
+            </li>
+        </ul>
+        <div id="task-progress"></div>
+    </div>
+    {% endblock %}
+</body>
+</html>

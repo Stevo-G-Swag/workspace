@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Chains</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
+</head>
+<body>
+    {% extends "base.html" %}
+    {% block content %}
+    <div class="container">
+        <h1 class="mt-5">Manage Chains</h1>
+        <form method="POST" class="mt-3">
+            <div class="form-group">
+                <label for="tasks">Select Tasks</label>
+                <select multiple class="form-control" id="tasks" name="tasks" required>
+                    {% set seen_tasks = [] %}
+                    {% for task in tasks %}
+                        {% if task.description not in seen_tasks %}
+                            <option value="{{ task.description }}">{{ task.description }}</option>
+                            {% set seen_tasks = seen_tasks + [task.description] %}
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Create Chain</button>
+        </form>
+        <h2 class="mt-5">Existing Chains</h2>
+        <ul class="list-group mt-3">
+            {% for chain in chains %}
+                <li class="list-group-item">
+                    Chain with tasks:
+                    {% for task in chain.links %}
+                        {{ task.description }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                    <form method="POST" action="{{ url_for('delete_chain', index=loop.index0) }}" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endblock %}
+</body>
+</html>

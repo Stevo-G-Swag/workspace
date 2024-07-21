@@ -1,0 +1,4 @@
+flask-socketio
+apscheduler
+flask-login
+Werkzeug
